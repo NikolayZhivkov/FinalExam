@@ -7,6 +7,7 @@ import org.testng.Assert;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class CommonVeryfication {
@@ -21,7 +22,7 @@ public class CommonVeryfication {
         Thread.sleep(10);
 
         String actualTitle = Browser.driver.getTitle();
-        Assert.assertEquals(actualTitle,expectedTitle,errorMessage);
+        Assert.assertEquals(actualTitle, expectedTitle, errorMessage);
     }
 
     public static void errorMessages() {
@@ -45,24 +46,40 @@ public class CommonVeryfication {
 //        WebElement passwordError = Browser.driver.findElement(LOC_ERROR_PASSWORD);
 //        passwordError.getText();
 //        Assert.assertEquals(passwordError,"Password must be between 4 and 20 characters!","The error message is incorrect!");
-        WebElement errorMessages = Browser.driver.findElement(By.xpath("//div[@class=\"text-danger\"]"));
+        WebElement errorMessages = Browser.driver.findElement(By.cssSelector("div.text-danger"));
 
-        List<String> exp_errors = Arrays.asList(new String[]{"First Name must be between 1 and 32 characters!","Last Name must be between 1 and 32 characters!",
-        "E-Mail Address does not appear to be valid!","Telephone must be between 3 and 32 characters!",
-        "Password must be between 4 and 20 characters!"});
+        List<String> exp_errors = Arrays.asList(
+                "First Name must be between 1 and 32 characters!",
+                "Last Name must be between 1 and 32 characters!",
+                "E-Mail Address does not appear to be valid!",
+                "Telephone must be between 3 and 32 characters!",
+                "Password must be between 4 and 20 characters!");
 
-       List<String> act_errors = new ArrayList<>();
 
+        List<WebElement> errorElements = Browser.driver.findElements(By.cssSelector("div.text-danger"));
 
-        for (String errors: act_errors) {
-act_errors.add(errors);
-
-Assert.assertEquals(act_errors.toArray(),exp_errors.toArray());
-
+        for (WebElement currErrElement : errorElements) {
+            if(!exp_errors.contains(currErrElement.getText())){
+                Assert.fail("The error messages are not completely correct!");
+            }
         }
 
 
 
+
+//        List<String> act_errors = new ArrayList<>();
+//
+//        List<String> all_errors = Collections.singletonList(errorMessages.getText());
+
+
+
+
+//        for (String errors : all_errors) {
+//            act_errors.add(errors);
+//
+//            Assert.assertEquals(act_errors.toArray(), exp_errors.toArray());
+//
+//        }
 
 
     }
